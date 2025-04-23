@@ -1,103 +1,91 @@
-import Image from "next/image";
+'use client';
+import React from 'react'
+import { TypeAnimation } from "react-type-animation";
+import GlitchButton from '@/components/ui/GlitchButton';
+import AnimatedShinyText from '@/components/ui/AnimatedShinyText';
 
-export default function Home() {
+const Home = () => {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="w-full min-h-screen flex items-center overflow-hidden h-100vh z-10 select-none relative ">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  py-12 sm:py-16">
+        <div className="max-w-4xl w-full mx-auto sm:mx-0 space-y-8 sm:space-y-10">
+          {/* Hero section */}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <div className="space-y-3 text-center sm:text-left">
+            <h1 className="text-4xl sm:text-6xl md:text-5xl font-extrabold text-white tracking-tight 
+                            animate-fade-in-up [text-wrap:balance]">
+              Pratham Israni
+            </h1>
+
+            {/* Type animation with fixed height to prevent layout shift */}
+            <div className="h-16 sm:h-14 flex items-center justify-center sm:justify-start">
+              <TypeAnimation
+                sequence={[
+                  "Programmer.",
+                  2000,
+                  "Frontend Developer.",
+                  2000,
+                  "Competitive Programmer.",
+                  2000,
+                  "Problem Solver.",
+                  2000,
+                  "UI/UX Designer.",
+                  2000,
+                ]}
+                wrapper="span"
+                speed={50}
+                cursor={true}
+                className="text-lg sm:text-xl md:text-2xl text-gray-300 font-light"
+                repeat={Infinity}
+              />
+            </div>
+
+            {/* Description */}
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto sm:mx-0 
+                            animate-fade-in-up animation-delay-300 leading-relaxed">
+              Explore my journey through code and creativity.
+              Building experiences that make a difference.
+            </p>
+
+            {/* CTA Button */}
+            <GlitchButton
+
+              className="max-w-full inline-flex items-center whitespace-nowrap px-auto md:px-4 py-3 text-sm sm:text-base
+                                  bg-white/10 hover:bg-white/15 backdrop-blur-sm 
+                                  text-white rounded-lg border border-white/10
+                                  transition-all duration-300 group
+                                  mx-auto sm:mx-0 animate-fade-in-up animation-delay-600
+                                  hover:shadow-lg hover:shadow-purple-500/10 z-10"
+            >
+              <AnimatedShinyText>
+                <div className="flex items-center space-x-2 text-white/70">
+                  <span>Press</span>
+                  <kbd className="px-2 py-1 bg-white/70 text-black font-extrabold rounded text-sm">Ctrl</kbd>
+                  <span>+</span>
+                  <kbd className="px-2 py-1 bg-white/70 text-black font-extrabold rounded text-sm">K</kbd>
+                  <span>to Start</span>
+                  <svg
+                    className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </div>
+              </AnimatedShinyText>
+            </GlitchButton>
+          </div>
+          \
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
-  );
+  )
 }
+
+export default Home
