@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
-import { ReactNode, useRef } from "react"
-
-export default function SectionAnimation({ children, className = "", delay = 0 }:{children:ReactNode, className:string, delay:number}) {
+import { useRef } from "react"
+type SectionAnimationType = {
+  children:React.ReactNode, className:string, delay?:number
+}
+export default function SectionAnimation({ children, className = "", delay = 0 }:SectionAnimationType) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: false, margin: "-100px 0px" })
 
