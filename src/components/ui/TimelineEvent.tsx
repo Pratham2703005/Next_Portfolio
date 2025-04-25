@@ -1,8 +1,16 @@
 "use client"
 
 import { motion } from "framer-motion"
-
-export default function TimelineEvent({ event, index }) {
+import { ReactNode } from "react"
+type EventType = {
+  year: string,
+      title: string,
+      institution: string,
+      description: string,
+      achievement: string,
+      icon: ReactNode
+}
+export default function TimelineEvent({ event, index }:{event:EventType, index:number}) {
   return (
     <motion.div
       initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}

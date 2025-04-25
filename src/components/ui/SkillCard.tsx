@@ -11,7 +11,7 @@ export default function SkillCard({ title, skills, index }: { title: string; ski
       viewport={{ once: false, amount: 0.3 }}
       className="bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-md border border-gray-700 hover:border-purple-600 rounded-2xl p-6 shadow-xl transition-all"
     >
-      <h3 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+      <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
         {title}
       </h3>
       <div className="flex flex-wrap gap-2">

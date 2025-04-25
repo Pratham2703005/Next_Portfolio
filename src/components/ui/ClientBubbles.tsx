@@ -2,9 +2,16 @@
 
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
+type BubblesType = {
+  x: number,
+  y: number,
+  size: number,
+  scale: number,
+  duration: number
+}
 
 export default function ClientBubbles() {
-  const [bubbles, setBubbles] = useState([])
+  const [bubbles, setBubbles] = useState<BubblesType[]>([])
 
   useEffect(() => {
     const newBubbles = Array.from({ length: 20 }, () => ({

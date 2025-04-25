@@ -14,15 +14,15 @@ export default function ContactForm() {
     message: "",
   })
 
-  const handleChange = (e) => {
-    const { id, value } = e.target
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement| HTMLTextAreaElement>) => {
+    const { id, value }= e.target
     setFormData((prev) => ({
       ...prev,
       [id]: value,
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // Form submission logic would go here
     console.log("Form submitted:", formData)

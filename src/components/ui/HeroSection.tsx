@@ -1,9 +1,9 @@
 import { ArrowDown, Download, Mail } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import ClientParticles from "./ui/ClientParticles"
+import ClientParticles from "./ClientParticles"
 import { Button } from "@/components/ui/button"
-import HeroAnimation from "./ui/HeroAnimation"
+import HeroAnimation from "./HeroAnimation"
 
 export default function HeroSection() {
   return (

@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
-import { useRef } from "react"
+import { ReactNode, useRef } from "react"
 
-export default function HeroAnimation({ children }) {
+export default function HeroAnimation({ children}:{children:ReactNode}) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: false })
 

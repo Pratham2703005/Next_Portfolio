@@ -2,9 +2,15 @@
 
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
-
+type ParticlesType = {
+  x: number,
+  y: number,
+  size: number,
+  scale: number,
+  duration: number
+}
 export default function ClientParticles() {
-  const [particles, setParticles] = useState([])
+  const [particles, setParticles] = useState<ParticlesType[]>([])
 
   useEffect(() => {
     const newParticles = Array.from({ length: 15 }, () => ({

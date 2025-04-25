@@ -1,6 +1,6 @@
-import SectionHeading from "./ui/SectionHeading"
-import ClientBubbles from "./ui/ClientBubbles"
-import SkillCard from "./ui/SkillCard"
+import SectionHeading from "./SectionHeading";
+import ClientBubbles from "./ClientBubbles";
+import SkillCard from './SkillCard';
 
 export default function SkillsSection() {
   const skillCategories = [
