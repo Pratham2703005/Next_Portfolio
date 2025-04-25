@@ -4,12 +4,13 @@ import { useState, useEffect } from "react"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import dynamic from "next/dynamic"
 import { Note } from "./note"
-import { PreviewNote } from "./preview-note" // Import the new component
+import { PreviewNote } from "./preview-note"
 import { UserAvatar } from "./user-avatar"
 import { AllMessages } from '@/utils/type'
 import { CANVAS_SIZE, MESSAGE_ZOOM_THRESHOLD, CENTER_POINT, DEFAULT_CANVAS_MESSAGE_POSITION } from '@/utils/default-data'
 import { useSession } from "next-auth/react"
 import useSWR, { mutate } from 'swr'
+import { ChevronLeft, ChevronRight } from "lucide-react" // Import icons for toggle
 
 const Sidebar = dynamic(() => import("./sidebar").then(mod => mod.default), { ssr: false })
 
@@ -26,6 +27,8 @@ export default function Home() {
   const [transform, setTransform] = useState({ scale: 1, positionX: 0, positionY: 0 })
   const [viewportDimensions, setViewportDimensions] = useState({ width: 0, height: 0 })
   const { data: session } = useSession()
+  // State for sidebar visibility on mobile
+  const [sidebarVisible, setSidebarVisible] = useState(true)
   
   // New state for preview note
   const [previewNote, setPreviewNote] = useState<{
@@ -54,7 +57,7 @@ export default function Home() {
     : `/api/messages/forUsers?email=${encodeURIComponent(email)}`
     
   const { data: messages = [], error } = useSWR(
-     messagesUrl,
+    messagesUrl,
     fetcher,
     {
       revalidateOnFocus: true,
@@ -62,7 +65,6 @@ export default function Home() {
       dedupingInterval: 2000, // Deduplicate requests within 2 seconds
     }
   )
-  console.log('data: ',messages);
 
   // Track viewport dimensions
   useEffect(() => {
@@ -76,17 +78,30 @@ export default function Home() {
       }
     }
 
+    // Set initial sidebar state based on screen size
+    const checkScreenSize = () => {
+      if (window.innerWidth < 768) {
+        setSidebarVisible(false)
+      } else {
+        setSidebarVisible(true)
+      }
+    }
+
     window.addEventListener('resize', updateViewportDimensions)
+    window.addEventListener('resize', checkScreenSize)
     
-    // Initial viewport dimensions
+    // Initial checks
+    checkScreenSize()
     setTimeout(updateViewportDimensions, 100)
     
     return () => {
       window.removeEventListener('resize', updateViewportDimensions)
+      window.removeEventListener('resize', checkScreenSize)
     }
   }, [])
 
   const addNote = (note: AllMessages) => {
+    setSidebarVisible(false);
     mutate(messagesUrl, [...messages, note], false)
     mutate(messagesUrl)
     
@@ -96,6 +111,11 @@ export default function Home() {
       isVisible: false,
       content: ""
     }))
+    
+    // Auto-hide sidebar on mobile after adding a note
+    if (window.innerWidth < 768) {
+      setSidebarVisible(false)
+    }
   }
 
   // New function to update preview note
@@ -158,20 +178,45 @@ export default function Home() {
     height: Math.round(viewportDimensions.height / transform.scale)
   }
 
+  // Toggle sidebar visibility
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible)
+  }
+
   // Display loading state or error when fetching messages
   if (error) {
     return <div className="flex h-full items-center justify-center text-red-500">Failed to load messages</div>
   }
 
   return (
-    <div className="flex overflow-hidden h-[calc(100vh-4rem)]">
-      <Sidebar 
-        addNote={addNote}
-        defaultX={DEFAULT_CANVAS_MESSAGE_POSITION} 
-        defaultY={DEFAULT_CANVAS_MESSAGE_POSITION}
-        existingNotes={messages} // Pass existing notes to Sidebar
-        updatePreviewNote={updatePreviewNote} // Pass the new function
-      />
+    <div className="flex flex-col md:flex-row overflow-hidden h-[calc(100vh-4rem)] relative">
+      {/* Sidebar with responsive behavior */}
+      <div 
+        className={`
+          ${sidebarVisible ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} 
+          ${sidebarVisible ? 'w-full md:w-80 bg-black' : 'w-0 md:w-0 '} 
+          absolute md:relative z-20 transition-all duration-300 h-full
+        `}
+      >
+        <Sidebar 
+          className={`${sidebarVisible ? 'p-4' : 'p-0'}`}
+          addNote={addNote}
+          defaultX={DEFAULT_CANVAS_MESSAGE_POSITION} 
+          defaultY={DEFAULT_CANVAS_MESSAGE_POSITION}
+          existingNotes={messages}
+          updatePreviewNote={updatePreviewNote}
+        />
+      </div>
+      
+      {/* Toggle button for sidebar */}
+      <button 
+        onClick={toggleSidebar}
+        className="md:hidden absolute top-4 right-4 z-30 bg-[#2b2b2b] rounded-full p-2 shadow-[0_0_10px_#35184d]"
+      >
+        {sidebarVisible ? <ChevronLeft size={20} className="text-white" /> : <ChevronRight size={20} className="text-white" />}
+      </button>
+      
+      {/* Canvas container */}
       <div className="flex-1 overflow-hidden relative">
         {/* Grid overlay that moves with the canvas */}
         <div 
@@ -189,15 +234,15 @@ export default function Home() {
         {/* Status display at bottom right */}
         <div className="absolute bottom-4 right-4 bg-white bg-opacity-75 p-2 rounded shadow-md text-xs font-mono z-10">
           <div>Zoom: {(transform.scale * 100).toFixed(0)}%</div>
-          <div>Visible: {visibleArea.width} × {visibleArea.height}</div>
+          <div className="hidden sm:block">Visible: {visibleArea.width} × {visibleArea.height}</div>
         </div>
         
         <TransformWrapper
           initialScale={0.6}
-          minScale={0.11} // Allow much further zooming out
-          maxScale={7}   // Allow more zooming in
+          minScale={0.11}
+          maxScale={7}
           limitToBounds={false}
-          wheel={{ step: 0.05 }} // Smoother zoom steps
+          wheel={{ step: 0.05 }}
           onTransformed={({ state }) => {
             setTransform({
               scale: state.scale,
@@ -206,7 +251,7 @@ export default function Home() {
             })
           }}
           centerOnInit={true}
-          doubleClick={{ disabled: true }} // Disable default double-click behavior
+          doubleClick={{ disabled: true }}
         >
           <TransformComponent
             wrapperStyle={{ width: "100%", height: "100%" }}

@@ -32,11 +32,11 @@ export default function EducationSection() {
   ]
 
   return (
-    <section id="education" className="min-h-screen py-20 relative">
+    <section id="education" className="min-h-screen py-10 md:py-20 relative">
       <div className="container mx-auto px-4">
         <SectionHeading>Education Timeline</SectionHeading>
 
-        <div className="max-w-5xl mx-auto relative">
+        <div className="max-w-5xl mx-auto relative mt-10">
           {/* Timeline Line */}
           <div className="absolute left-5 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 via-purple-400 to-blue-500 transform md:translate-x-[-2px]"></div>
 

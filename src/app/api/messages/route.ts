@@ -31,6 +31,7 @@ export async function POST(req:NextRequest){
         return NextResponse.json(newMessage);
     } catch (error ) {
         if(error instanceof Error) {
+            console.log('message creation trouble')
             console.log(error.message);
             return NextResponse.json({error: error.message})
         }
@@ -62,6 +63,7 @@ export async function DELETE(req:NextRequest){
         return NextResponse.json({success:true})
     }catch(e){
         if(e instanceof Error){
+            console.log('message deletion trouble')
             console.log(e.message)
             return NextResponse.json({error:e.message})
         }

@@ -1,8 +1,6 @@
 'use client';
 import React from 'react'
 import { TypeAnimation } from "react-type-animation";
-import GlitchButton from '@/components/ui/GlitchButton';
-import AnimatedShinyText from '@/components/ui/AnimatedShinyText';
 
 const Home = () => {
   return (
@@ -47,7 +45,7 @@ const Home = () => {
             </p>
 
             {/* CTA Button */}
-            <div className="mt-6 flex justify-center sm:justify-start">
+            {/* <div className="mt-6 flex justify-center sm:justify-start">
               <GlitchButton
                 className="inline-flex items-center whitespace-nowrap px-4 py-3 text-sm sm:text-base
                               bg-white/10 hover:bg-white/15 backdrop-blur-sm 
@@ -79,7 +77,7 @@ const Home = () => {
                   </div>
                 </AnimatedShinyText>
               </GlitchButton>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

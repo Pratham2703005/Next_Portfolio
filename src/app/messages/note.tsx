@@ -54,7 +54,7 @@ const Note = memo(function Note({ message, updatePosition, deleteNote}: NoteProp
     >
       <div
         ref={nodeRef}
-        className={`absolute w-64 p-4 rounded-lg shadow-lg ${
+        className={`custom-scrollbar absolute w-64 p-4 max-h-64 overflow-y-auto rounded-lg shadow-lg ${
           isDragging ? "z-50" : "z-10"
         } ${message.isPublic ? "bg-[#1e1e2e]" : "bg-[#27272a]"} ${
           getBorderClass()

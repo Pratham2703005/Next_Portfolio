@@ -24,7 +24,7 @@ export default function AchievementCarousel({ achievements }: { achievements: Ac
           transition={{ duration: 0.8 }}
           viewport={{ once: false, amount: 0.3 }}
         >
-          <Card className="bg-black/40 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border-gray-800">
+          <Card className="bg-black/40 backdrop-blur-sm rounded-md md:rounded-xl shadow-2xl overflow-hidden border-gray-800">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row items-center">
                 {/* Image */}
@@ -49,10 +49,10 @@ export default function AchievementCarousel({ achievements }: { achievements: Ac
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.2 }}
                   >
-                    <h3 className="text-3xl font-bold text-purple-400 mb-4">
+                    <h3 className="text-xl md:text-3xl font-bold text-purple-400 mb-4">
                       {achievements[selectedAchievement].title}
                     </h3>
-                    <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                    <p className="text-gray-300 text-sm md:text-lg leading-relaxed mb-6">
                       {achievements[selectedAchievement].description}
                     </p>
 
@@ -61,7 +61,7 @@ export default function AchievementCarousel({ achievements }: { achievements: Ac
                       <Button
                         asChild
                         variant="default"
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                        className="bg-gradient-to-r w-full from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                       >
                         <a href={achievements[selectedAchievement].link} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="mr-2 h-4 w-4" />
@@ -71,13 +71,13 @@ export default function AchievementCarousel({ achievements }: { achievements: Ac
                     )}
 
                     {isAchievementType1(achievements[selectedAchievement]) === false && achievements[selectedAchievement].links && (
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-3 w-full">
                         {achievements[selectedAchievement].links.map((link, i) => (
                           <Button
                             key={i}
                             asChild
                             variant="default"
-                            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                            className="bg-gradient-to-r w-full from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                           >
                             <a href={link.url} target="_blank" rel="noopener noreferrer">
                               <Award className="mr-2 h-4 w-4" />
@@ -95,7 +95,7 @@ export default function AchievementCarousel({ achievements }: { achievements: Ac
         </motion.div>
 
         {/* Navigation Controls */}
-        <div className="absolute top-1/2 left-4 right-4 flex justify-between items-center transform -translate-y-1/2 z-10">
+        <div className="absolute top-1/4 md:top-1/2 left-4 right-4 flex justify-between items-center transform -translate-y-1/2 z-10">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}

@@ -55,8 +55,8 @@ export default function TimelineEvent({ event, index }:{event:EventType, index:n
 
         <div className="bg-black/40 p-6 rounded-lg shadow-md border border-gray-700 hover:border-purple-700 transition-all duration-300 backdrop-blur-sm">
           <h3 className="text-xl font-bold text-purple-300 mb-2">{event.title}</h3>
-          <h4 className="text-lg font-medium text-gray-300 mb-3">{event.institution}</h4>
-          <p className="text-gray-400 mb-3">{event.description}</p>
+          <h4 className="text-md md:text-lg font-medium text-gray-300 mb-3">{event.institution}</h4>
+          <p className="text-sm md:text-md text-gray-400 mb-3">{event.description}</p>
           <p className="font-medium text-blue-300">{event.achievement}</p>
         </div>
       </div>

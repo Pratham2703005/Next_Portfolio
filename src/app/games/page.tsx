@@ -30,20 +30,20 @@ const games = [
 
 export default function Games() {
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-8 text-white">Arcade Games</h1>
+    <div className="container mx-auto px-3 py-10 md:p-6">
+      <h1 className="text-4xl font-bold mb-4 md:mb-8 text-white">Arcade Games</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
         {games.map((game) => (
           <Link key={game.name} href={game.href} className="group">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 h-full transition-all duration-300 hover:bg-white/10 hover:scale-[1.02] hover:shadow-lg">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2 md:p-6 h-full transition-all duration-300 hover:bg-white/10 hover:scale-[1.02] hover:shadow-lg">
               <div className="flex items-center mb-4">
                 <div className="bg-purple-500/20 p-3 rounded-lg mr-4">
                   <game.icon className="h-6 w-6 text-purple-400" />
                 </div>
                 <h2 className="text-xl font-semibold text-white">{game.name}</h2>
               </div>
-              <p className="text-white/70">{game.description}</p>
+              <p className="text-white/70 text-sm md:text-md">{game.description}</p>
               <div className="mt-4 text-purple-400 flex items-center text-sm font-medium group-hover:translate-x-1 transition-transform">
                 Play now <span className="ml-1">→</span>
               </div>

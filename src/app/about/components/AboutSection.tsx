@@ -8,16 +8,16 @@ import { ReactNode } from "react"
 
 export default function AboutSection() {
   return (
-    <section id="about" className="min-h-screen flex items-center pt-20 pb-10 relative">
+    <section id="about" className="min-h-screen flex items-center pb-10 relative">
       <div className="container mx-auto px-4">
         <SectionHeading>About Me</SectionHeading>
 
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <SectionAnimation className="lg:w-1/2">
             <Card className="bg-black/40 border-gray-800 backdrop-blur-sm hover:border-purple-900/50 transition-all duration-300">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-6 text-purple-300">Who I Am</h3>
-                <div className="space-y-4 text-lg">
+              <CardContent className="p-4 md:p-8">
+                <h3 className="text-xl md:text-2xl font-bold mb-6 text-purple-300">Who I Am</h3>
+                <div className="space-y-2 text-sm md:space-y-4 md:text-lg">
                   <p>
                     I&apos;m a passionate <span className="font-semibold text-purple-300">Software Developer</span> and{" "}
                     <span className="font-semibold text-blue-300">Competitive Programmer</span>, driven by my love for
@@ -38,12 +38,12 @@ export default function AboutSection() {
             </Card>
           </SectionAnimation>
 
-          <SectionAnimation className="lg:w-1/2" delay={0.2}>
+          <SectionAnimation className="w-full md:w-1/2" delay={0.2}>
             <Card className="bg-black/40 border-gray-800 backdrop-blur-sm hover:border-blue-900/50 transition-all duration-300 h-full">
-              <CardContent className="p-8">
+              <CardContent className="p-4 md:p-8">
                 <h3 className="text-2xl font-bold mb-6 text-blue-300">Connect With Me</h3>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
                   <SocialLink
                     href="https://github.com/Pratham2703005"
                     icon={<Github className="h-6 w-6 text-blue-400" />}

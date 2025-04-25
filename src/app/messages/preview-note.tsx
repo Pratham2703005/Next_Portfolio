@@ -36,7 +36,7 @@ const PreviewNote = memo(function PreviewNote({
   return (
     <div
       ref={nodeRef}
-      className={`absolute w-64 p-4 rounded-lg shadow-lg z-30 ${
+      className={`custom-scrollbar absolute w-64 p-4 max-h-64 rounded-lg shadow-lg z-30 ${
         isPublic ? "bg-[#1e1e2e]" : "bg-[#27272a]"
       } ${getBorderClass()} border-2 cursor-default opacity-75`}
       style={{
