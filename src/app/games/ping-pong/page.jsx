@@ -291,6 +291,10 @@ const PongGame = () => {
     setGameActive(true)
     setGameStarted(false)
   }
+  let ping_pong_text ="Tap and drag to control"
+  if (typeof window !== 'undefined' && 'ontouchstart' in window) {
+    ping_pong_text = "Move your mouse to control"
+  }
 
   return (
     <div className="flex flex-col items-center h-full px-2 sm:px-4" ref={containerRef}>
@@ -298,7 +302,7 @@ const PongGame = () => {
         <div className="mb-2 sm:mb-0 mt-10 md:mt-0">
           <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2 text-white">Ping Pong</h1>
           <p className="text-sm sm:text-base text-white/70 mb-2 sm:mb-6">
-            {('ontouchstart' in window) ? "Tap and drag to control" : "Move your mouse to control"}
+            {ping_pong_text}
           </p>
         </div>
         <div className="flex items-center"> 
