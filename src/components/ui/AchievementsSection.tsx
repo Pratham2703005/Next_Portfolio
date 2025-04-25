@@ -1,5 +1,5 @@
-import SectionHeading from "./ui/SectionHeading"
-import AchievementCarousel from "./ui/AchievementCarousel"
+import SectionHeading from "./SectionHeading"
+import AchievementCarousel from "./AchievementCarousel"
 
 export default function AchievementsSection() {
   const achievements = [

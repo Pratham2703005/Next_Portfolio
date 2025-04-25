@@ -2,8 +2,9 @@ import { Code, Download, Github, Linkedin, Mail } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import SectionHeading from "./ui/SectionHeading"
-import SectionAnimation from "./ui/SectionAnimation"
+import SectionHeading from "./SectionHeading"
+import SectionAnimation from "./SectionAnimation"
+import { ReactNode } from "react"
 
 export default function AboutSection() {
   return (
@@ -92,7 +93,7 @@ export default function AboutSection() {
   )
 }
 
-function SocialLink({ href, icon, title, description }) {
+function SocialLink({ href, icon, title, description }:{href:string, icon:ReactNode, title:string, description:string}) {
   return (
     <Link
       href={href}

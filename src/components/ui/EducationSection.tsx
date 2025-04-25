@@ -1,6 +1,6 @@
 import { Award, BookOpen } from "lucide-react"
-import SectionHeading from "./ui/SectionHeading"
-import TimelineEvent from "./ui/TimelineEvent"
+import SectionHeading from "./SectionHeading"
+import TimelineEvent from "./TimelineEvent"
 
 export default function EducationSection() {
   const timelineEvents = [
