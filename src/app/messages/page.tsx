@@ -62,6 +62,7 @@ export default function Home() {
       dedupingInterval: 2000, // Deduplicate requests within 2 seconds
     }
   )
+  console.log('data: ',messages);
 
   // Track viewport dimensions
   useEffect(() => {

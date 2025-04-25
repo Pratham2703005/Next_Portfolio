@@ -4,5 +4,5 @@ import GitHub from 'next-auth/providers/github';
 import {PrismaAdapter} from '@auth/prisma-adapter';
 export const {auth, handlers, signIn} = NextAuth({
     adapter : PrismaAdapter(prisma),
-    providers : [GitHub]
+    providers : [GitHub],
 })
