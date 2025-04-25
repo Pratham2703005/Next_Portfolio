@@ -1,13 +1,17 @@
-"use client"
-
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Award, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { AchievementType1 ,AchievementType2 , AchievementType} from "@/app/about/components/AchievementsSection"
 
-export default function AchievementCarousel({ achievements }) {
-  const [selectedAchievement, setSelectedAchievement] = useState(0)
+export default function AchievementCarousel({ achievements }: { achievements: AchievementType }) {
+  const [selectedAchievement, setSelectedAchievement] = useState<number>(0)
+
+  // Type guard to check if achievement is of type AchievementType1
+  const isAchievementType1 = (achievement: AchievementType1 | AchievementType2): achievement is AchievementType1 => {
+    return (achievement as AchievementType1).link !== undefined
+  }
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -52,7 +56,7 @@ export default function AchievementCarousel({ achievements }) {
                     </p>
 
                     {/* View Details Button */}
-                    {achievements[selectedAchievement].link && (
+                    {isAchievementType1(achievements[selectedAchievement]) && achievements[selectedAchievement].link && (
                       <Button
                         asChild
                         variant="default"
@@ -65,7 +69,7 @@ export default function AchievementCarousel({ achievements }) {
                       </Button>
                     )}
 
-                    {achievements[selectedAchievement].links && (
+                    {isAchievementType1(achievements[selectedAchievement]) === false && achievements[selectedAchievement].links && (
                       <div className="flex flex-wrap gap-3">
                         {achievements[selectedAchievement].links.map((link, i) => (
                           <Button
@@ -130,35 +134,6 @@ export default function AchievementCarousel({ achievements }) {
           />
         ))}
       </div>
-
-      {/* Achievement Thumbnails */}
-      {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
-        {achievements.map((achievement, index) => (
-          <motion.button
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: false, amount: 0.3 }}
-            onClick={() => setSelectedAchievement(index)}
-            className={`relative overflow-hidden rounded-lg group ${
-              selectedAchievement === index ? "ring-2 ring-purple-400 ring-offset-2 ring-offset-gray-800" : ""
-            }`}
-          >
-            <div className="aspect-[4/3]">
-              <img
-                src={achievement.image || "/placeholder.svg"}
-                alt={achievement.title}
-                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-3 text-white text-sm font-medium truncate">
-                {achievement.title}
-              </div>
-            </div>
-          </motion.button>
-        ))}
-      </div> */}
     </div>
   )
 }

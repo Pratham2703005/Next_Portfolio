@@ -1,8 +1,31 @@
 import SectionHeading from "@/components/ui/SectionHeading"
 import AchievementCarousel from "@/components/ui/AchievementCarousel"
 
+export type AchievementType1 = {
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+  linkText: string;
+};
+
+export type AchievementType2 = {
+  title: string;
+  description: string;
+  image: string;
+  links: LinksType[];
+};
+
+type LinksType = {
+  url: string;
+  text: string;
+};
+
+// `AchievementType` is an array that can hold either `AchievementType1` or `AchievementType2` items.
+export type AchievementType = (AchievementType1 | AchievementType2)[];
+
 export default function AchievementsSection() {
-  const achievements = [
+  const achievements: AchievementType = [
     {
       title: "SIH 2024 Finalist",
       description:
@@ -47,7 +70,7 @@ export default function AchievementsSection() {
       link: "https://leetcode.com/u/Pratham012/",
       linkText: "View Profile",
     },
-  ]
+  ];
 
   return (
     <section id="achievements" className="min-h-screen py-20 relative">
@@ -58,5 +81,5 @@ export default function AchievementsSection() {
         <AchievementCarousel achievements={achievements} />
       </div>
     </section>
-  )
+  );
 }
