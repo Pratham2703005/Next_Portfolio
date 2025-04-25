@@ -1,14 +1,4 @@
-// lib/types.ts
 
-export interface NoteType {
-  id: string
-  message: string
-  isPublic: boolean
-  x: number
-  y: number
-  createdAt: string
-  userId?: string
-}
 
 export interface UserType {
   id: string

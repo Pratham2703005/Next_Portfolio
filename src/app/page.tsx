@@ -6,11 +6,10 @@ import AnimatedShinyText from '@/components/ui/AnimatedShinyText';
 
 const Home = () => {
   return (
-    <div className="w-full min-h-screen flex items-center overflow-hidden h-100vh z-10 select-none relative ">
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  py-12 sm:py-16">
+    <div className="w-full min-h-[calc(100vh-4rem)] flex items-center justify-center">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="max-w-4xl w-full mx-auto sm:mx-0 space-y-8 sm:space-y-10">
           {/* Hero section */}
-
           <div className="space-y-3 text-center sm:text-left">
             <h1 className="text-4xl sm:text-6xl md:text-5xl font-extrabold text-white tracking-tight 
                             animate-fade-in-up [text-wrap:balance]">
@@ -48,40 +47,40 @@ const Home = () => {
             </p>
 
             {/* CTA Button */}
-            <GlitchButton
-
-              className="max-w-full inline-flex items-center whitespace-nowrap px-auto md:px-4 py-3 text-sm sm:text-base
-                                  bg-white/10 hover:bg-white/15 backdrop-blur-sm 
-                                  text-white rounded-lg border border-white/10
-                                  transition-all duration-300 group
-                                  mx-auto sm:mx-0 animate-fade-in-up animation-delay-600
-                                  hover:shadow-lg hover:shadow-purple-500/10 z-10"
-            >
-              <AnimatedShinyText>
-                <div className="flex items-center space-x-2 text-white/70">
-                  <span>Press</span>
-                  <kbd className="px-2 py-1 bg-white/70 text-black font-extrabold rounded text-sm">Ctrl</kbd>
-                  <span>+</span>
-                  <kbd className="px-2 py-1 bg-white/70 text-black font-extrabold rounded text-sm">K</kbd>
-                  <span>to Start</span>
-                  <svg
-                    className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </div>
-              </AnimatedShinyText>
-            </GlitchButton>
+            <div className="mt-6 flex justify-center sm:justify-start">
+              <GlitchButton
+                className="inline-flex items-center whitespace-nowrap px-4 py-3 text-sm sm:text-base
+                              bg-white/10 hover:bg-white/15 backdrop-blur-sm 
+                              text-white rounded-lg border border-white/10
+                              transition-all duration-300 group
+                              animate-fade-in-up animation-delay-600
+                              hover:shadow-lg hover:shadow-purple-500/10"
+              >
+                <AnimatedShinyText>
+                  <div className="flex items-center space-x-2 text-white/70">
+                    <span>Press</span>
+                    <kbd className="px-2 py-1 bg-white/70 text-black font-extrabold rounded text-sm">Ctrl</kbd>
+                    <span>+</span>
+                    <kbd className="px-2 py-1 bg-white/70 text-black font-extrabold rounded text-sm">K</kbd>
+                    <span>to Start</span>
+                    <svg
+                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </div>
+                </AnimatedShinyText>
+              </GlitchButton>
+            </div>
           </div>
-          \
         </div>
       </div>
     </div>

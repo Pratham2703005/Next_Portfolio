@@ -4,38 +4,64 @@ import { useState, useEffect } from "react"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import dynamic from "next/dynamic"
 import { Note } from "./note"
+import { PreviewNote } from "./preview-note" // Import the new component
 import { UserAvatar } from "./user-avatar"
-import { AllMessages } from '@/utils/type';
-import { CANVAS_SIZE, MESSAGE_ZOOM_THRESHOLD,CENTER_POINT } from '@/utils/default-canvas-data'
+import { AllMessages } from '@/utils/type'
+import { CANVAS_SIZE, MESSAGE_ZOOM_THRESHOLD, CENTER_POINT, DEFAULT_CANVAS_MESSAGE_POSITION } from '@/utils/default-data'
 import { useSession } from "next-auth/react"
+import useSWR, { mutate } from 'swr'
+
 const Sidebar = dynamic(() => import("./sidebar").then(mod => mod.default), { ssr: false })
 
+// SWR fetcher function
+const fetcher = async (url: string) => {
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  return response.json()
+}
 
 export default function Home() {
   const [transform, setTransform] = useState({ scale: 1, positionX: 0, positionY: 0 })
   const [viewportDimensions, setViewportDimensions] = useState({ width: 0, height: 0 })
-  const [messages, setMessages] = useState<AllMessages[]>([])
-  const session = useSession();
-
-  useEffect(()=>{
-    async function fetchMessages(){
-      if(session && session.data?.user?.email === process.env.ADMIN_EMAIL){
-        //admin messages
-        const response = await fetch('/api/messages/forAdmin');
-        if(!response.ok) window.alert('Something went Wrong while fetching messages for Admin');
-        const data = await response.json();
-        if(data.length !== 0) setMessages(data);
-      }else{
-        const email = session?.data?.user?.email
-        const response = await fetch(`/api/messages/forUsers?email=${encodeURIComponent(email || "")}`);
-        if (!response.ok) window.alert("Something went wrong while fetching messages for Users");
-        const data = await response.json();
-        if (data.length !== 0) setMessages(data);
-
-      }
-    } 
-    fetchMessages()
-  },[session])
+  const { data: session } = useSession()
+  
+  // New state for preview note
+  const [previewNote, setPreviewNote] = useState<{
+    content: string;
+    isPublic: boolean;
+    x: number;
+    y: number;
+    isVisible: boolean;
+    userName?: string;
+    userImage?: string;
+  }>({
+    content: "",
+    isPublic: true,
+    x: DEFAULT_CANVAS_MESSAGE_POSITION,
+    y: DEFAULT_CANVAS_MESSAGE_POSITION,
+    isVisible: false,
+    userName: "",
+    userImage: ""
+  })
+  
+  // SWR for messages
+  const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL
+  const email = session?.user?.email || ""
+  const messagesUrl = isAdmin 
+    ? '/api/messages/forAdmin' 
+    : `/api/messages/forUsers?email=${encodeURIComponent(email)}`
+    
+  const { data: messages = [], error } = useSWR(
+     messagesUrl,
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      refreshInterval: 10000, // Refresh every 10 seconds
+      dedupingInterval: 2000, // Deduplicate requests within 2 seconds
+    }
+  )
 
   // Track viewport dimensions
   useEffect(() => {
@@ -54,70 +80,96 @@ export default function Home() {
     // Initial viewport dimensions
     setTimeout(updateViewportDimensions, 100)
     
-    // Load notes from dummy data
-    // const initialNotes = dummyUsers.flatMap(user => 
-    //   user.messages.map((msg : UserMessageType) => ({
-    //     id: msg.id,
-    //     message: msg.content,
-    //     isPublic: msg.isPublic,
-    //     x: msg.x,
-    //     y: msg.y,
-    //     createdAt: msg.createdAt,
-    //     userId: user.id
-    //   }))
-    // )
-    
-    // setNotes(initialNotes)
-    
     return () => {
       window.removeEventListener('resize', updateViewportDimensions)
     }
   }, [])
 
   const addNote = (note: AllMessages) => {
-    setMessages([...messages, note])
-  }
-
-  const updateNotePosition = (id: string, x: number, y: number) => {
-    setMessages(
-      messages.map((note) =>
-        note.id === id ? { ...note, x, y } : note
-      )
-    )
-  }
-
-  const deleteNote = async(noteId:string) =>{
+    mutate(messagesUrl, [...messages, note], false)
+    mutate(messagesUrl)
     
-    const newMessages = messages.filter((message)=>message.id !== noteId);
-    setMessages(newMessages)
-
-    const response = await fetch('/api/messages',{
-      body:JSON.stringify({id:noteId}),
-      headers: {'Content-Type' : 'application/json'},
-      method:"DELETE"
-    })
-    if(!response.ok){
-      window.alert('Something went wrong while deleting Message');
-    }
-    const data = await response.json();
-    setMessages(data);
+    // Reset preview note after adding
+    setPreviewNote(prev => ({
+      ...prev,
+      isVisible: false,
+      content: ""
+    }))
   }
 
+  // New function to update preview note
+  const updatePreviewNote = (previewData: Partial<typeof previewNote>) => {
+    setPreviewNote(prev => ({
+      ...prev,
+      ...previewData
+    }))
+  }
+
+  const updateNotePosition = async (id: string, x: number, y: number) => {
+    // Optimistic update
+    const updatedMessages = messages.map((note:AllMessages) =>
+      note.id === id ? { ...note, x, y } : note
+    )
+    
+    mutate(messagesUrl, updatedMessages, false)
+    
+    // Update in the backend
+    try {
+      await fetch('/api/messages', {
+        method: "PATCH",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, x, y }),
+      })
+      
+      // Revalidate after backend update
+      mutate(messagesUrl)
+    } catch (error) {
+      console.error("Failed to update note position:", error)
+      // Revert optimistic update on error
+      mutate(messagesUrl)
+    }
+  }
+
+  const deleteNote = async (noteId: string) => {
+    // Optimistic UI update
+    const updatedMessages = messages.filter((message : AllMessages) => message.id !== noteId)
+    mutate(messagesUrl, updatedMessages, false)
+  
+    try {
+      await fetch('/api/messages', {
+        method: "DELETE",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: noteId }),
+      })
+      
+      // Revalidate after backend update
+      mutate(messagesUrl)
+    } catch (error) {
+      console.error("Failed to delete message:", error)
+      // Revert optimistic update on error
+      mutate(messagesUrl)
+    }
+  }
+  
   // Calculate visible canvas dimensions
   const visibleArea = {
     width: Math.round(viewportDimensions.width / transform.scale),
     height: Math.round(viewportDimensions.height / transform.scale)
   }
 
-  // Find user by note
- 
+  // Display loading state or error when fetching messages
+  if (error) {
+    return <div className="flex h-full items-center justify-center text-red-500">Failed to load messages</div>
+  }
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex overflow-hidden h-[calc(100vh-4rem)]">
       <Sidebar 
         addNote={addNote}
-        defaultX={CENTER_POINT} 
-        defaultY={CENTER_POINT} 
+        defaultX={DEFAULT_CANVAS_MESSAGE_POSITION} 
+        defaultY={DEFAULT_CANVAS_MESSAGE_POSITION}
+        existingNotes={messages} // Pass existing notes to Sidebar
+        updatePreviewNote={updatePreviewNote} // Pass the new function
       />
       <div className="flex-1 overflow-hidden relative">
         {/* Grid overlay that moves with the canvas */}
@@ -137,7 +189,6 @@ export default function Home() {
         <div className="absolute bottom-4 right-4 bg-white bg-opacity-75 p-2 rounded shadow-md text-xs font-mono z-10">
           <div>Zoom: {(transform.scale * 100).toFixed(0)}%</div>
           <div>Visible: {visibleArea.width} × {visibleArea.height}</div>
-          <div>Position: {Math.round(CENTER_POINT - transform.positionX/transform.scale)}, {Math.round(CENTER_POINT - transform.positionY/transform.scale)}</div>
         </div>
         
         <TransformWrapper
@@ -180,8 +231,7 @@ export default function Home() {
               />
               
               {/* Display notes or avatars based on zoom threshold */}
-              {messages.map((message) => {
-                
+              {messages.map((message: AllMessages) => {
                 // Show avatar if below threshold, show note if above threshold
                 return transform.scale >= MESSAGE_ZOOM_THRESHOLD ? (
                   <Note key={message.id} message={message} updatePosition={updateNotePosition} deleteNote={deleteNote}/>
@@ -193,9 +243,36 @@ export default function Home() {
                     x={message.x} 
                     y={message.y} 
                     scale={transform.scale}
+                    isPublic={message.isPublic}
+                    userEmail={message.user_email}
                   />
                 )
               })}
+              
+              {/* Display preview note if visible and above zoom threshold */}
+              {previewNote.isVisible && transform.scale >= MESSAGE_ZOOM_THRESHOLD && (
+                <PreviewNote 
+                  content={previewNote.content}
+                  isPublic={previewNote.isPublic}
+                  x={previewNote.x}
+                  y={previewNote.y}
+                  userName={previewNote.userName}
+                  userImage={previewNote.userImage}
+                />
+              )}
+              
+              {/* Display preview avatar if visible and below zoom threshold */}
+              {previewNote.isVisible && transform.scale < MESSAGE_ZOOM_THRESHOLD && (
+                <UserAvatar 
+                  name={previewNote.userName}
+                  image={previewNote.userImage}
+                  x={previewNote.x}
+                  y={previewNote.y}
+                  scale={transform.scale}
+                  isPublic={previewNote.isPublic}
+                  userEmail={session?.user?.email || ""}
+                />
+              )}
             </div>
           </TransformComponent>
         </TransformWrapper>

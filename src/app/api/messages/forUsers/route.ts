@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
           {
             AND: [
               { isPublic: false },
-              { user: { email } } // No need to include user in result
+              { user: { email } } 
             ]
           }
         ]
@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
         userId: true,
         user_name: true,
         user_image: true,
+        user_email: true,
         createdAt: true,
       }
     });

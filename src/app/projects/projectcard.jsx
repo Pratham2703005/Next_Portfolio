@@ -25,11 +25,11 @@ export function ProjectCard({ image, title, description, liveLink, repoLink, tec
 
   return (
     <CardContainer className="inter-var">
-      <CardBody className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-auto rounded-xl p-6 border">
+      <CardBody className="bg-black relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] border-white/[0.2] w-full h-auto rounded-xl p-6 border">
         {/* Project Title */}
         <CardItem
           translateZ="50"
-          className="text-xl font-bold text-neutral-600 dark:text-white"
+          className="text-xl font-bold text-white"
         >
           {title}
         </CardItem>
@@ -69,7 +69,7 @@ export function ProjectCard({ image, title, description, liveLink, repoLink, tec
         <CardItem
           as="p"
           translateZ="60"
-          className="w-full text-neutral-500 text-sm mt-2 dark:text-neutral-300 p-5 "
+          className="w-full text-sm mt-2 text-neutral-300 p-5 "
         >
           {isExpanded
             ? description

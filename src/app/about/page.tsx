@@ -1,23 +1,29 @@
-'use client';
-import Education from './Education';
-import AboutSection from './About';
-const About = () => {
-  
+import type { Metadata } from "next"
+import HeroSection from "./components/HeroSection"
+import AboutSection from "./components/AboutSection"
+import SkillsSection from "./components/SkillsSection"
+import AchievementsSection from "./components/AchievementsSection"
+import EducationSection from "./components/EducationSection"
+import ScrollProgressBar from "@/components/ui/ScrollProgressBar"
+
+export const metadata: Metadata = {
+  title: "Pratham Israni | Software Developer",
+  description: "Portfolio of Pratham Israni, Software Developer & Competitive Programmer",
+}
+
+export default function AboutMeScrollablePage() {
   return (
-    <section className="py-32 md:py-32 text-white h-full w-full overflow-hidden relative select-none">
-      <div className="absolute inset-0 pointer-events-none"></div>
-      <div className="container mx-auto px-4 relative z-10">
-        <AboutSection />
+    <div className="relative text-white overflow-x-hidden">
+      {/* Progress bar is client component */}
+      <ScrollProgressBar />
 
-        {/* Education Section */}
-        <Education/>    
-
-        {/* skills and Achievements are left */}
-
-
-      </div>
-    </section>
-  );
-};
-
-export default About;
+      {/* Server-rendered sections */}
+      <HeroSection />
+      <AboutSection />
+      <SkillsSection />
+      <EducationSection />
+      <AchievementsSection />
+      {/* <ContactSection /> */}
+    </div>
+  )
+}
