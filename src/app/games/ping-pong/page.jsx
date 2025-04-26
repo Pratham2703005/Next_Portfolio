@@ -3,11 +3,11 @@ import { useRef, useEffect, useState } from "react"
 import { RotateCcw } from "lucide-react"
 
 // Base game dimensions
-const BASE_WIDTH = 800;
-const BASE_HEIGHT = 500;
-const BASE_PADDLE_HEIGHT = 100;
-const BASE_PADDLE_WIDTH = 10;
-const BASE_BALL_SIZE = 12;
+const BASE_WIDTH = 800
+const BASE_HEIGHT = 500
+const BASE_PADDLE_HEIGHT = 100
+const BASE_PADDLE_WIDTH = 10
+const BASE_BALL_SIZE = 12
 
 const PongGame = () => {
   const canvasRef = useRef(null)
@@ -22,45 +22,45 @@ const PongGame = () => {
     paddleHeight: BASE_PADDLE_HEIGHT,
     paddleWidth: BASE_PADDLE_WIDTH,
     ballSize: BASE_BALL_SIZE,
-    scaleFactor: 1
+    scaleFactor: 1,
   })
   const requestRef = useRef(null)
 
   // Handle window resize
   useEffect(() => {
     const updateDimensions = () => {
-      if (!containerRef.current) return;
-      
-      const containerWidth = containerRef.current.clientWidth;
-      const scaleFactor = Math.min(1, containerWidth / BASE_WIDTH);
-      
+      if (!containerRef.current) return
+
+      const containerWidth = containerRef.current.clientWidth
+      const scaleFactor = Math.min(1, containerWidth / BASE_WIDTH)
+
       setDimensions({
         width: BASE_WIDTH * scaleFactor,
         height: BASE_HEIGHT * scaleFactor,
         paddleHeight: BASE_PADDLE_HEIGHT * scaleFactor,
         paddleWidth: BASE_PADDLE_WIDTH * scaleFactor,
         ballSize: BASE_BALL_SIZE * scaleFactor,
-        scaleFactor
-      });
-    };
+        scaleFactor,
+      })
+    }
 
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    
+    updateDimensions()
+    window.addEventListener("resize", updateDimensions)
+
     return () => {
-      window.removeEventListener('resize', updateDimensions);
-    };
-  }, []);
+      window.removeEventListener("resize", updateDimensions)
+    }
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
     const ctx = canvas.getContext("2d")
-    
+
     // Set canvas dimensions
-    canvas.width = dimensions.width;
-    canvas.height = dimensions.height;
+    canvas.width = dimensions.width
+    canvas.height = dimensions.height
 
     let playerY = dimensions.height / 2 - dimensions.paddleHeight / 2
     let botY = dimensions.height / 2 - dimensions.paddleHeight / 2
@@ -120,25 +120,29 @@ const PongGame = () => {
 
       // Draw paddles with gradient
       const playerGradient = ctx.createLinearGradient(
-        0, playerY, 
-        dimensions.paddleWidth, playerY + dimensions.paddleHeight
+        0,
+        playerY,
+        dimensions.paddleWidth,
+        playerY + dimensions.paddleHeight,
       )
       playerGradient.addColorStop(0, "#a855f7")
       playerGradient.addColorStop(1, "#6366f1")
       drawRect(0, playerY, dimensions.paddleWidth, dimensions.paddleHeight, playerGradient)
 
       const botGradient = ctx.createLinearGradient(
-        dimensions.width - dimensions.paddleWidth, botY, 
-        dimensions.width, botY + dimensions.paddleHeight
+        dimensions.width - dimensions.paddleWidth,
+        botY,
+        dimensions.width,
+        botY + dimensions.paddleHeight,
       )
       botGradient.addColorStop(0, "#3b82f6")
       botGradient.addColorStop(1, "#2563eb")
       drawRect(
-        dimensions.width - dimensions.paddleWidth, 
-        botY, 
-        dimensions.paddleWidth, 
-        dimensions.paddleHeight, 
-        botGradient
+        dimensions.width - dimensions.paddleWidth,
+        botY,
+        dimensions.paddleWidth,
+        dimensions.paddleHeight,
+        botGradient,
       )
 
       // Draw ball with glow effect
@@ -152,14 +156,22 @@ const PongGame = () => {
         ctx.fillStyle = "white"
         ctx.font = `${20 * dimensions.scaleFactor}px Geist, sans-serif`
         ctx.textAlign = "center"
-        
+
         // Different instructions for touch devices
-        if ('ontouchstart' in window) {
-          ctx.fillText("Tap and drag to move paddle", dimensions.width / 2, dimensions.height / 2 - 30 * dimensions.scaleFactor)
+        if ("ontouchstart" in window) {
+          ctx.fillText(
+            "Tap and drag to move paddle",
+            dimensions.width / 2,
+            dimensions.height / 2 - 30 * dimensions.scaleFactor,
+          )
         } else {
-          ctx.fillText("Move your mouse to control the paddle", dimensions.width / 2, dimensions.height / 2 - 30 * dimensions.scaleFactor)
+          ctx.fillText(
+            "Move your mouse to control the paddle",
+            dimensions.width / 2,
+            dimensions.height / 2 - 30 * dimensions.scaleFactor,
+          )
         }
-        
+
         ctx.fillText("Tap to start", dimensions.width / 2, dimensions.height / 2 + 10 * dimensions.scaleFactor)
       }
     }
@@ -167,8 +179,10 @@ const PongGame = () => {
     const calculateBounceAngle = (ballY, paddleY) => {
       const relativeIntersectY = ballY - (paddleY + dimensions.paddleHeight / 2)
       const normalized = relativeIntersectY / (dimensions.paddleHeight / 2)
+      // Limit the normalized value to prevent extreme angles
+      const clampedNormalized = Math.max(-0.8, Math.min(0.8, normalized))
       const maxBounceAngle = Math.PI / 3 // 60 degrees
-      return normalized * maxBounceAngle
+      return clampedNormalized * maxBounceAngle
     }
 
     const update = () => {
@@ -178,7 +192,14 @@ const PongGame = () => {
       ball.y += ball.dy
 
       // Bounce off top/bottom with slight randomization
-      if (ball.y < dimensions.ballSize || ball.y > dimensions.height - dimensions.ballSize) {
+      if (ball.y - dimensions.ballSize < 0 || ball.y + dimensions.ballSize > dimensions.height) {
+        // Prevent the ball from going outside the canvas
+        if (ball.y - dimensions.ballSize < 0) {
+          ball.y = dimensions.ballSize
+        } else {
+          ball.y = dimensions.height - dimensions.ballSize
+        }
+
         ball.dy *= -1
         // Add slight randomization to make game more unpredictable
         ball.dy += (Math.random() - 0.5) * 0.5 * dimensions.scaleFactor
@@ -186,10 +207,14 @@ const PongGame = () => {
 
       // Player paddle collision
       if (
-        ball.x < dimensions.paddleWidth + dimensions.ballSize && 
-        ball.y > playerY && 
-        ball.y < playerY + dimensions.paddleHeight
+        ball.x - dimensions.ballSize <= dimensions.paddleWidth &&
+        ball.x > 0 &&
+        ball.y + dimensions.ballSize > playerY &&
+        ball.y - dimensions.ballSize < playerY + dimensions.paddleHeight
       ) {
+        // Prevent the ball from getting stuck inside the paddle
+        ball.x = dimensions.paddleWidth + dimensions.ballSize
+
         const angle = calculateBounceAngle(ball.y, playerY)
         ball.dx = ball.speed * Math.cos(angle)
         ball.dy = ball.speed * Math.sin(angle)
@@ -200,10 +225,14 @@ const PongGame = () => {
 
       // Bot paddle collision
       if (
-        ball.x > dimensions.width - dimensions.paddleWidth - dimensions.ballSize && 
-        ball.y > botY && 
-        ball.y < botY + dimensions.paddleHeight
+        ball.x + dimensions.ballSize >= dimensions.width - dimensions.paddleWidth &&
+        ball.x < dimensions.width &&
+        ball.y + dimensions.ballSize > botY &&
+        ball.y - dimensions.ballSize < botY + dimensions.paddleHeight
       ) {
+        // Prevent the ball from getting stuck inside the paddle
+        ball.x = dimensions.width - dimensions.paddleWidth - dimensions.ballSize
+
         const angle = calculateBounceAngle(ball.y, botY)
         ball.dx = -ball.speed * Math.cos(angle)
         ball.dy = ball.speed * Math.sin(angle)
@@ -291,8 +320,8 @@ const PongGame = () => {
     setGameActive(true)
     setGameStarted(false)
   }
-  let ping_pong_text ="Tap and drag to control"
-  if (typeof window !== 'undefined' && 'ontouchstart' in window) {
+  let ping_pong_text = "Tap and drag to control"
+  if (typeof window !== "undefined" && "ontouchstart" in window) {
     ping_pong_text = "Move your mouse to control"
   }
 
@@ -301,11 +330,9 @@ const PongGame = () => {
       <div className="flex justify-between px-5 w-full max-w-3xl mb-4">
         <div className="mb-2 sm:mb-0 mt-10 md:mt-0">
           <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2 text-white">Ping Pong</h1>
-          <p className="text-sm sm:text-base text-white/70 mb-2 sm:mb-6">
-            {ping_pong_text}
-          </p>
+          <p className="text-sm sm:text-base text-white/70 mb-2 sm:mb-6">{ping_pong_text}</p>
         </div>
-        <div className="flex items-center"> 
+        <div className="flex items-center">
           <button
             onClick={resetGame}
             className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1 sm:py-2 bg-white/10 hover:bg-white/20 text-white text-sm sm:text-base rounded-lg transition-colors"
@@ -323,7 +350,7 @@ const PongGame = () => {
           style={{
             width: `${dimensions.width}px`,
             height: `${dimensions.height}px`,
-            maxWidth: '100%'
+            maxWidth: "100%",
           }}
         />
       </div>
