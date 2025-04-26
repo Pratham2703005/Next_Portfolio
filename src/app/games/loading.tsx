@@ -1,7 +1,7 @@
 export default function Loading() {
     return (
       <div
-        className="flex items-center justify-center h-screen w-full relative z-10"
+        className="flex items-center justify-center h-[100dvh] w-full relative z-10"
         role="status"
         aria-busy="true"
       >

@@ -8,7 +8,7 @@ import { ReactNode } from "react"
 
 export default function AboutSection() {
   return (
-    <section id="about" className="min-h-screen flex items-center pb-10 relative">
+    <section id="about" className="min-h-[100dvh] flex items-center pb-10 relative">
       <div className="container mx-auto px-4">
         <SectionHeading>About Me</SectionHeading>
 

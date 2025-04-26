@@ -189,7 +189,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row overflow-hidden h-[calc(100vh-4rem)] relative">
+    <div className="flex flex-col md:flex-row overflow-hidden h-[calc(100dvh-4rem)] relative">
       {/* Sidebar with responsive behavior */}
       <div 
         className={`

@@ -47,7 +47,7 @@ export default function SkillsSection() {
   ];
 
   return (
-    <section id="skills" className="min-h-screen py-20 relative">
+    <section id="skills" className="min-h-[100dvh] py-20 relative">
       {/* Floating particles - client component */}
       <ClientBubbles />
 

@@ -73,7 +73,7 @@ export default function AchievementsSection() {
   ];
 
   return (
-    <section id="achievements" className="min-h-screen py-5 md:py-20 relative">
+    <section id="achievements" className="min-h-[100dvh] py-5 md:pt-20 md:pb-10 relative">
       <div className="container mx-auto px-4">
         <SectionHeading>Achievements</SectionHeading>
 

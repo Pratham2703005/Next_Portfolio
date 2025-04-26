@@ -7,7 +7,7 @@ import HeroAnimation from "@/components/ui/HeroAnimation"
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="min-h-screen relative flex flex-col items-center md:justify-center overflow-hidden">
+    <section id="hero" className="min-h-[100dvh] relative flex flex-col items-center md:justify-center overflow-hidden">
       {/* Background particles - client component */}
       <ClientParticles />
 

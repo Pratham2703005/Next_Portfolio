@@ -4,7 +4,7 @@ import { TypeAnimation } from "react-type-animation";
 
 const Home = () => {
   return (
-    <div className="w-full min-h-[calc(100vh-4rem)] flex items-center justify-center">
+    <div className="w-full min-h-[calc(100dvh-4rem)] flex items-center justify-center">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="max-w-4xl w-full mx-auto sm:mx-0 space-y-8 sm:space-y-10">
           {/* Hero section */}

@@ -28,11 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black z-10 w-full min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black z-10 w-full min-h-[100dvh]`}
       >
         <SessionProvider>
           <SWRProvider>
-            <div className="flex flex-col min-h-screen relative">
+            <div className="flex flex-col min-h-[100dvh] relative">
               {/* Fixed background decorative elements */}
               <div className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute inset-0 opacity-20">

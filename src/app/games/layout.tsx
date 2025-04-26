@@ -16,7 +16,7 @@ export default function GamesLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname()
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] w-full ">
+    <div className="flex h-[calc(100dvh-4rem)] w-full ">
       {/* Simple Sidebar */}
       <div className="w-72 backdrop-blur-md  border-r border-white/10 hidden md:block mt-4 ">
         
