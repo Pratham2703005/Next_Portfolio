@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pratham's Portfolio",
+  title: "Pratham Israni Portfolio",
   description: "Connect, Collab and Chill",
 };
 

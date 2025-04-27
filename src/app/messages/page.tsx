@@ -14,7 +14,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react" // Import icons for tog
 
 const Sidebar = dynamic(() => import("./sidebar").then(mod => mod.default), { ssr: false })
 
-// SWR fetcher function
 const fetcher = async (url: string) => {
   const response = await fetch(url)
   if (!response.ok) {
@@ -24,6 +23,7 @@ const fetcher = async (url: string) => {
 }
 
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(false)
   const [transform, setTransform] = useState({ scale: 1, positionX: 0, positionY: 0 })
   const [viewportDimensions, setViewportDimensions] = useState({ width: 0, height: 0 })
   const { data: session } = useSession()
@@ -61,8 +61,8 @@ export default function Home() {
     fetcher,
     {
       revalidateOnFocus: true,
-      refreshInterval: 10000, // Refresh every 10 seconds
-      dedupingInterval: 2000, // Deduplicate requests within 2 seconds
+      refreshInterval: 10000,
+      dedupingInterval: 2000, 
     }
   )
 
@@ -77,16 +77,18 @@ export default function Home() {
         })
       }
     }
-
+  
     // Set initial sidebar state based on screen size
     const checkScreenSize = () => {
-      if (window.innerWidth < 768) {
-        setSidebarVisible(false)
-      } else {
+      const mobile = window.innerWidth < 768
+      setIsMobile(mobile)
+      
+      // Keep sidebar always visible on larger screens
+      if (!mobile) {
         setSidebarVisible(true)
       }
     }
-
+  
     window.addEventListener('resize', updateViewportDimensions)
     window.addEventListener('resize', checkScreenSize)
     
@@ -126,31 +128,6 @@ export default function Home() {
     }))
   }
 
-  const updateNotePosition = async (id: string, x: number, y: number) => {
-    // Optimistic update
-    const updatedMessages = messages.map((note:AllMessages) =>
-      note.id === id ? { ...note, x, y } : note
-    )
-    
-    mutate(messagesUrl, updatedMessages, false)
-    
-    // Update in the backend
-    try {
-      await fetch('/api/messages', {
-        method: "PATCH",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, x, y }),
-      })
-      
-      // Revalidate after backend update
-      mutate(messagesUrl)
-    } catch (error) {
-      console.error("Failed to update note position:", error)
-      // Revert optimistic update on error
-      mutate(messagesUrl)
-    }
-  }
-
   const deleteNote = async (noteId: string) => {
     // Optimistic UI update
     const updatedMessages = messages.filter((message : AllMessages) => message.id !== noteId)
@@ -172,15 +149,16 @@ export default function Home() {
     }
   }
   
-  // Calculate visible canvas dimensions
   const visibleArea = {
     width: Math.round(viewportDimensions.width / transform.scale),
     height: Math.round(viewportDimensions.height / transform.scale)
   }
 
-  // Toggle sidebar visibility
   const toggleSidebar = () => {
-    setSidebarVisible(!sidebarVisible)
+    // Only toggle if on mobile
+    if (isMobile) {
+      setSidebarVisible(!sidebarVisible)
+    }
   }
 
   // Display loading state or error when fetching messages
@@ -193,13 +171,13 @@ export default function Home() {
       {/* Sidebar with responsive behavior */}
       <div 
         className={`
-          ${sidebarVisible ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} 
-          ${sidebarVisible ? 'w-full md:w-80 bg-black' : 'w-0 md:w-0 '} 
+          ${isMobile ? (sidebarVisible ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'} 
+          ${sidebarVisible ? 'w-full md:w-80 bg-black' : 'w-0 md:w-80'} 
           absolute md:relative z-20 transition-all duration-300 h-full
         `}
       >
         <Sidebar 
-          className={`${sidebarVisible ? 'p-4' : 'p-0'}`}
+          className={`${sidebarVisible ? 'p-4 md:p-4 md:bg-black' : 'p-0 md:p-4 md:bg-black'}`}
           addNote={addNote}
           defaultX={DEFAULT_CANVAS_MESSAGE_POSITION} 
           defaultY={DEFAULT_CANVAS_MESSAGE_POSITION}
@@ -211,7 +189,7 @@ export default function Home() {
       {/* Toggle button for sidebar */}
       <button 
         onClick={toggleSidebar}
-        className="md:hidden absolute top-4 right-4 z-30 bg-[#2b2b2b] rounded-full p-2 shadow-[0_0_10px_#35184d]"
+        className={`${isMobile ? 'block' : 'hidden'} absolute top-4 right-4 z-30 bg-[#2b2b2b] rounded-full p-2 shadow-[0_0_10px_#35184d]`}
       >
         {sidebarVisible ? <ChevronLeft size={20} className="text-white" /> : <ChevronRight size={20} className="text-white" />}
       </button>
@@ -232,7 +210,7 @@ export default function Home() {
         />
         
         {/* Status display at bottom right */}
-        <div className="absolute bottom-4 right-4 bg-white bg-opacity-75 p-2 rounded shadow-md text-xs font-mono z-10">
+        <div className="absolute bottom-4 right-4 bg-black border-gray-800 text-white bg-opacity-75 p-2 rounded shadow-md text-xs font-mono z-10">
           <div>Zoom: {(transform.scale * 100).toFixed(0)}%</div>
           <div className="hidden sm:block">Visible: {visibleArea.width} × {visibleArea.height}</div>
         </div>
@@ -280,7 +258,7 @@ export default function Home() {
               {messages.map((message: AllMessages) => {
                 // Show avatar if below threshold, show note if above threshold
                 return transform.scale >= MESSAGE_ZOOM_THRESHOLD ? (
-                  <Note key={message.id} message={message} updatePosition={updateNotePosition} deleteNote={deleteNote}/>
+                  <Note key={message.id} message={message}  deleteNote={deleteNote}/>
                 ) : (
                   <UserAvatar 
                     name={message?.user_name}

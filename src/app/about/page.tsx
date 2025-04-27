@@ -7,9 +7,9 @@ import EducationSection from "./components/EducationSection"
 import ScrollProgressBar from "@/components/ui/ScrollProgressBar"
 
 export const metadata: Metadata = {
-  title: "Pratham Israni | Software Developer",
-  description: "Portfolio of Pratham Israni, Software Developer & Competitive Programmer",
-}
+  title: "Pratham Israni Portfolio",
+  description: "About",
+};
 
 export default function AboutMeScrollablePage() {
   return (

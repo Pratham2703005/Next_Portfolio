@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
+
+'use client';
 import { cnCard } from "@/utils/cn";
 import React, {
   createContext,

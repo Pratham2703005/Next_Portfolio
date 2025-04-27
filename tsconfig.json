@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/games/tic-tac-toe/page.jsx", "src/app/games/snake/page.jsx", "src/app/games/ping-pong/page.jsx", "src/app/games/memory/page.jsx", "src/app/about/page.jsx", "src/app/about/components/Hero.jsx", "src/app/about/components/Hero.jsx", "src/app/about/components/AboutSection.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/games/tic-tac-toe/page.jsx", "src/app/games/snake/page.jsx", "src/app/games/ping-pong/page.jsx", "src/app/games/memory/page.jsx", "src/app/about/page.jsx", "src/app/about/components/Hero.jsx", "src/app/about/components/Hero.jsx", "src/app/about/components/AboutSection.tsx", "src/app/projects/projectcard.jsx"],
   "exclude": ["node_modules"]
 }

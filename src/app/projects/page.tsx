@@ -1,4 +1,4 @@
-'use client';
+
 import { projects } from "./project_data";
 import {ProjectCard } from './projectcard';
 
