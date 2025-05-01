@@ -37,6 +37,14 @@ export const projects = [
       techStack: ["/skills/React.svg", "/skills/tail.svg", "/skills/mui.svg"],
     },
     {
+      "image": "/project/canvasStudio.png",
+      "title": "Canvas Studio",
+      "description": "A versatile web drawing application built with React and Tailwind CSS. Canvas Studio features multiple drawing tools including pencil, eraser, and shape tools with adjustable brush sizes and opacity. Users can create multi-page drawings, undo actions, and export their artwork as PNG files. The app provides an intuitive interface with responsive design that works across devices, supporting both mouse and touch inputs. I implemented a custom drawing engine using the HTML5 Canvas API and built a complete UI with tools panels, color pickers, and page management.",
+      "repoLink": "https://github.com/Pratham2703005/Canvas-studio",
+      "liveLink": "https://canvas-studio-pk.vercel.app/",
+      "techStack": ["/skills/React.svg", "/skills/tail.svg", "/skills/js.svg", "/skills/html.svg", "/skills/css.svg"]
+    },
+    {
         image: "/project/sudoku.png",
         title: "Sudoku",
         description:
